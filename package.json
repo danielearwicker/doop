@@ -1,8 +1,9 @@
 {
   "name": "doop",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Succinct immmutable record classes for TypeScript",
-  "main": "index.js",
+  "main": "built/index.js",
+  "typings": "built/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
