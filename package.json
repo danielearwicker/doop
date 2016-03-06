@@ -1,11 +1,11 @@
 {
   "name": "doop",
-  "version": "0.0.3",
+  "version": "0.8.0",
   "description": "Succinct immmutable record classes for TypeScript",
   "main": "built/doop.js",
   "typings": "built/doop.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jasmine",
     "prepublish": "tsc"
   },
   "repository": {

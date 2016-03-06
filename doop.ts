@@ -79,9 +79,9 @@ export function Doop(
     if (!propertyKey) {
         function wrapper(...args: any[]) {
             // During construction, set the flag so Doop setters can mutate
-            this.$__Doops__$Constructing = true;
+            this.$__Doops__$Constructing = (this.$__Doops__$Constructing || 0) + 1;
             target.apply(this, args);
-            this.$__Doops__$Constructing = false;
+            this.$__Doops__$Constructing--;
             return this;
         }
 
@@ -89,9 +89,11 @@ export function Doop(
 
         const indices = prototype.$__Doops__$Indices;
 
-        // Redefine inherited Doop properties
-        for (const key of Object.keys(indices)) {
-            Object.defineProperty(prototype, key, makeDoopDescriptor(indices[key], prototype));
+        if (indices) {
+            // Redefine inherited Doop properties
+            for (const key of Object.keys(indices)) {
+                Object.defineProperty(prototype, key, makeDoopDescriptor(indices[key], prototype));
+            }
         }
 
         return wrapper;

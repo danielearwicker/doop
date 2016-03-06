@@ -12,8 +12,11 @@
         "removeComments": false,
         "noLib": false,
         "preserveConstEnums": true,
-        "suppressImplicitAnyIndexErrors": true,
-        "outDir": "built"
+        "outDir": "built",
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "suppressImplicitAnyIndexErrors": false,
+        "sourceMap": true
     },
     "filesGlob": [
         "**/*.ts",
@@ -25,7 +28,8 @@
     "buildOnSave": false,
     "files": [
         "doop.ts",
-        "tests.ts"
+        "spec/DoopSpec.ts",
+        "spec/support/jasmine.d.ts"
     ],
     "atom": {
         "rewriteTsconfig": true
