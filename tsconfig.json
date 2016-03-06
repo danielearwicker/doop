@@ -24,7 +24,7 @@
     "compileOnSave": true,
     "buildOnSave": false,
     "files": [
-        "index.ts",
+        "doop.ts",
         "tests.ts"
     ],
     "atom": {
