@@ -1,0 +1,24 @@
+{
+  "name": "doop",
+  "version": "0.0.1",
+  "description": "Succinct immmutable record classes for TypeScript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielearwicker/doop.git"
+  },
+  "keywords": [
+    "immutable",
+    "decorators",
+    "typescript"
+  ],
+  "author": "Daniel Earwicker <dan@earwicker.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/danielearwicker/doop/issues"
+  },
+  "homepage": "https://github.com/danielearwicker/doop#readme"
+}
