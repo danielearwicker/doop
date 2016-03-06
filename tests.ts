@@ -1,4 +1,4 @@
-import { Doop } from "./index";
+import { Doop } from "./doop";
 
 @Doop
 class Animal {
