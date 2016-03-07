@@ -1,6 +1,6 @@
 {
   "name": "doop",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "Succinct immmutable record classes for TypeScript",
   "main": "built/doop.js",
   "typings": "built/doop.d.ts",

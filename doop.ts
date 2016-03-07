@@ -1,8 +1,7 @@
-/*  Storage implementation is very simple: uses an array indexed
+/** Storage implementation is very simple: uses an array indexed
     by order of declaration. Cloning an array is very fast, see:
     https://github.com/facebook/immutable-js/issues/286
 */
-
 function makeDoopDescriptor(index: number, target: any) {
 
     // This implements the getter/setter for each Doop property
@@ -30,10 +29,10 @@ function makeDoopDescriptor(index: number, target: any) {
         const revision = Object.create(target);
 
         // Copy the secret array from the original object
-        const Doops = revision.$__Doops__$ = this.$__Doops__$.slice(0);
+        const copy = revision.$__Doops__$ = this.$__Doops__$.slice(0);
 
         // Mutate the new secret array
-        Doops[index] = val;
+        copy[index] = val;
 
         // Return the mutated clone
         return revision;
@@ -80,8 +79,11 @@ export function Doop(
         function wrapper(...args: any[]) {
             // During construction, set the flag so Doop setters can mutate
             this.$__Doops__$Constructing = (this.$__Doops__$Constructing || 0) + 1;
-            target.apply(this, args);
-            this.$__Doops__$Constructing--;
+            try {
+                target.apply(this, args);
+            } finally {
+                this.$__Doops__$Constructing--;
+            }
             return this;
         }
 
@@ -90,7 +92,13 @@ export function Doop(
         const indices = prototype.$__Doops__$Indices;
 
         if (indices) {
-            // Redefine inherited Doop properties
+            /** Redefine inherited Doop properties. Why? See makeDoopDescriptor.
+                when the user sets a property we clone the object, which starts
+                with giving the prototype to Object.create. This better not be
+                the base class's prototype, or we'll get an instance of the base
+                class. So we just create new definitions at every level of
+                inheritance.
+            */
             for (const key of Object.keys(indices)) {
                 Object.defineProperty(prototype, key, makeDoopDescriptor(indices[key], prototype));
             }
@@ -106,8 +114,6 @@ export function Doop(
     // Create the indices map so we can redefine properties in inheriting classes
     const indices = target.$__Doops__$Indices || (target.$__Doops__$Indices = {});
     indices[propertyKey] = index;
-
-    return makeDoopDescriptor(index, target);
 }
 
 /** As far as TypeScript is concerned, a Doop property is a getter that returns

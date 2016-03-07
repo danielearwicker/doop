@@ -77,6 +77,15 @@ class NoConstructor {
     get message() { return Doop<string, this>() }
 }
 
+@Doop
+class Mixed {
+
+    @Doop
+    get x() { return Doop<number, this>() }
+
+    y = 25;
+}
+
 describe("Doop", () => {
 
     it("allows mutation inside constructor", () => {
@@ -161,12 +170,24 @@ describe("Doop", () => {
         expect(p3.describe()).toEqual("Has 800 legs, a tail and likes to eat Mash. And is nervous.");
     });
 
-    it("tolerates an empty class", () => {
-        new Empty();
-    })
+    it("tolerates an empty class", () => new Empty());
 
     it("tolerates a constructorless class", () => {
         const o = new NoConstructor().message("hi");
         expect(o.message()).toEqual("hi");
-    })
+    });
+
+    it("doesn't clone any plain instance properties", () => {
+        const m = new Mixed();
+        expect(m.x()).toEqual(undefined);
+        expect(m.y).toEqual(25);
+
+        const m2 = m.x(42);
+        expect(m2.x()).toEqual(42);
+        expect(m2.y).toEqual(undefined); // instance fields go to undefined
+
+        // original unaffected
+        expect(m.x()).toEqual(undefined);
+        expect(m.y).toEqual(25);
+    });
 });
