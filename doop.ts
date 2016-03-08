@@ -76,7 +76,7 @@ export function doop(
     }
 
     if (!propertyKey) {
-        function wrapper(...args: any[]) {
+        const wrapper = function(...args: any[]) {
             // During construction, set the flag so Doop setters can mutate
             this.$__Doops__$Constructing = (this.$__Doops__$Constructing || 0) + 1;
             try {
