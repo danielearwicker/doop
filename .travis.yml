@@ -10,6 +10,5 @@ node_js:
   - "0.6"
   - "iojs"
 before_install:
-  - sudo npm install -g typescript
-  - sudo npm install -g jasmine
-  
+  - npm install -g typescript
+  - npm install -g jasmine
