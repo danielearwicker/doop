@@ -23,19 +23,19 @@ The package includes TypeScript declarations so you don't need to install them s
 How to declare a class with three properties:
 
 ```typescript
-import { Doop } from "../doop";
+import { doop } from "../doop";
 
-@Doop
+@doop
 class Animal {
 
-    @Doop
-    get hasTail() { return Doop<boolean, this>() }
+    @doop
+    get hasTail() { return doop<boolean, this>() }
 
-    @Doop
-    get legs() { return Doop<number, this>(); }
+    @doop
+    get legs() { return doop<number, this>(); }
 
-    @Doop
-    get food() { return Doop<string, this>(); }
+    @doop
+    get food() { return doop<string, this>(); }
 
     constructor() {
         this.hasTail(true).legs(2);
@@ -50,7 +50,7 @@ class Animal {
 
 And here's how you'd use it:
 
-```java
+```typescript
 const a = new Animal();
 expect(a.legs()).toEqual(2); // jasmine spec-style assertion
 
@@ -62,7 +62,7 @@ expect(b.legs()).toEqual(4);
 expect(a.legs()).toEqual(2);
 ```
 
-That is, you call the property with no arguments to get the value, and you call it with one argument to create a new, separate instance of the class with that property's value modified but all other Doop properties having the same value as the original instance. Cloning is super-fast.
+That is, you call the property with no arguments to get the value, and you call it with one argument to create a new, separate instance of the class with that property's value modified but all other `doop` properties having the same value as the original instance. Cloning is super-fast.
 
 (Avoid defining any ordinary instance properties on the same class; they will not be copied and will have the value `undefined` on a new cloned instance.)
 
