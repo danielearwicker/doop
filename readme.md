@@ -69,3 +69,5 @@ That is, you call the property with no arguments to get the value, and you call 
 ## More details
 
 See the [introductory blog post](https://smellegantcode.wordpress.com/2016/03/07/doop-immutable-classes-for-typescript/).
+
+I'm *right now* setting up travis.ci on this repository.
