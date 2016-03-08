@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/danielearwicker/doop.svg?branch=master)](https://travis-ci.org/danielearwicker/doop)
+
 ## doop
 
 ... is a way of writing immutable classes in TypeScript, with a fairly minimal syntax for declaring properties (you only have to state the property name and type once), and convenient/fast clone-with-update, all with static type checking and support for inheritance.
