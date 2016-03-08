@@ -49,23 +49,23 @@ function makeDoopDescriptor(index: number, target: any) {
 /** This overload is used in property declarations. It always returns null; its
     only job is to provide a brief way to state the type of the property getter.
 */
-export function Doop<V, O>(): Doop<V, O>;
+export function doop<V, O>(): Doop<V, O>;
 
 /** This overload acts as a decorator on a class, indicating that it is
     immutable.
 */
-export function Doop(target: any): any;
+export function doop(target: any): any;
 
 /** This overload acts as a decorator on a property getter, and converts it into
     an ordinary function which (this is the beautiful hack) is syntactically
     compatible with a getter that returns the Doop interface.
 */
-export function Doop(
+export function doop(
     target: any,
     propertyKey: string | symbol,
     descriptor: TypedPropertyDescriptor<any>): TypedPropertyDescriptor<any> | void;
 
-export function Doop(
+export function doop(
         target?: any,
         propertyKey?: string | symbol,
         descriptor?: TypedPropertyDescriptor<any>): TypedPropertyDescriptor<any> | void {

@@ -1,19 +1,19 @@
-import { Doop } from "../doop";
+import { doop } from "../doop";
 
-@Doop
+@doop
 class Animal {
 
-    @Doop
-    get hasFur() { return Doop<boolean, this>() }
+    @doop
+    get hasFur() { return doop<boolean, this>() }
 
-    @Doop
-    get hasTail() { return Doop<boolean, this>() }
+    @doop
+    get hasTail() { return doop<boolean, this>() }
 
-    @Doop
-    get legs() { return Doop<number, this>(); }
+    @doop
+    get legs() { return doop<number, this>(); }
 
-    @Doop
-    get food() { return Doop<string, this>(); }
+    @doop
+    get food() { return doop<string, this>(); }
 
     constructor() {
         this.hasTail(true).legs(2);
@@ -25,11 +25,11 @@ class Animal {
     }
 }
 
-@Doop
+@doop
 class Bear extends Animal {
 
-    @Doop
-    get ofLittleBrain() { return Doop<boolean, this>() }
+    @doop
+    get ofLittleBrain() { return doop<boolean, this>() }
 
     constructor(ofLittleBrain: boolean) {
         super();
@@ -44,18 +44,18 @@ class Bear extends Animal {
     }
 }
 
-@Doop
+@doop
 class Pooh extends Bear {
 
-    @Doop
-    get isHumming() { return Doop<boolean, this>() }
+    @doop
+    get isHumming() { return doop<boolean, this>() }
 
     constructor() {
         super(true);
     }
 }
 
-@Doop
+@doop
 class Piglet extends Animal {
 
     constructor() {
@@ -67,26 +67,26 @@ class Piglet extends Animal {
     }
 }
 
-@Doop
+@doop
 class Empty { }
 
-@Doop
+@doop
 class NoConstructor {
 
-    @Doop
-    get message() { return Doop<string, this>() }
+    @doop
+    get message() { return doop<string, this>() }
 }
 
-@Doop
+@doop
 class Mixed {
 
-    @Doop
-    get x() { return Doop<number, this>() }
+    @doop
+    get x() { return doop<number, this>() }
 
     y = 25;
 }
 
-describe("Doop", () => {
+describe("doop", () => {
 
     it("allows mutation inside constructor", () => {
         const a = new Animal();
