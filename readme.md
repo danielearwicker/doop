@@ -70,6 +70,6 @@ That is, you call the property with no arguments to get the value, and you call 
 
 ## More details
 
-See the [background info](http://earwicker.dtdns.net/Introducing-doop).
+See the [background info](http://danielearwicker.github.io/Introducing_doop.html).
 
 
