@@ -46,6 +46,10 @@ function makeDoopDescriptor(index: number, target: any) {
     };
 }
 
+function clone(obj: any) {    
+    return obj && JSON.parse(JSON.stringify(obj));
+}
+
 /** This overload is used in property declarations. It always returns null; its
     only job is to provide a brief way to state the type of the property getter.
 */
@@ -89,7 +93,7 @@ export function doop(
 
         const prototype = wrapper.prototype = target.prototype;
 
-        const indices = prototype.$__Doops__$Indices;
+        const indices = prototype.$__Doops__$Indices = clone(prototype.$__Doops__$Indices);
 
         if (indices) {
             /** Redefine inherited Doop properties. Why? See makeDoopDescriptor.
