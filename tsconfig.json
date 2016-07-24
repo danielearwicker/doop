@@ -18,20 +18,8 @@
         "suppressImplicitAnyIndexErrors": false,
         "sourceMap": true
     },
-    "filesGlob": [
-        "**/*.ts",
-        "**/*.tsx",
-        "!node_modules/**",
-        "!built/**"
-    ],
-    "compileOnSave": true,
-    "buildOnSave": false,
-    "files": [
-        "doop.ts",
-        "spec/DoopSpec.ts",
-        "spec/support/jasmine.d.ts"
-    ],
-    "atom": {
-        "rewriteTsconfig": true
-    }
+    "exclude": [
+        "node_modules",
+        "built"
+    ]    
 }

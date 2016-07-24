@@ -10,10 +10,10 @@ class Animal {
     get hasTail() { return doop<boolean, this>() }
 
     @doop
-    get legs() { return doop<number, this>(); }
+    get legs() { return doop<number, this>() }
 
     @doop
-    get food() { return doop<string, this>(); }
+    get food() { return doop<string, this>() }
 
     constructor() {
         this.hasTail(true).legs(2);
@@ -23,6 +23,16 @@ class Animal {
         const tail = this.hasTail() ? "a" : "no";
         return `Has ${this.legs()} legs, ${tail} tail and likes to eat ${this.food()}.`;
     }
+}
+
+@doop
+class Farm {
+
+    @doop
+    get owner() { return doop<Animal, this>() }
+
+    @doop
+    get bestPig() { return doop<Animal, this>() }
 }
 
 @doop
@@ -75,7 +85,7 @@ class Pooh extends Bear {
 
 @doop
 class SuperPiglet extends Piglet {
-    
+
     @doop
     get flying() { return doop<boolean, this>() }
 }
@@ -203,11 +213,11 @@ describe("doop", () => {
         expect(m.x()).toEqual(undefined);
         expect(m.y).toEqual(25);
     });
-    
+
     it("doesn't confuse properties in same position in peer classes", () => {
         const p = new SuperPiglet().haycorns(32);
         expect(p.haycorns()).toEqual(32);
-        
+
         const p2 = p.ofLittleBrain(false);
         expect(p2.ofLittleBrain()).toEqual(false);
         expect(p2.haycorns()).toEqual(32);

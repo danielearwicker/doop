@@ -1,7 +1,7 @@
 {
   "name": "doop",
-  "version": "0.9.3",
-  "description": "Succinct immmutable record classes for TypeScript",
+  "version": "2.0.0",
+  "description": "Succinct immmutable record classes and Redux for TypeScript",
   "main": "built/doop.js",
   "typings": "built/doop.d.ts",
   "scripts": {
@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/danielearwicker/doop/issues"
   },
-  "homepage": "https://github.com/danielearwicker/doop#readme"
+  "homepage": "https://github.com/danielearwicker/doop#readme",
+  "devDependencies": {
+    "jasmine": "^2.4.1"
+  }
 }
