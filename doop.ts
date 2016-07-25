@@ -7,7 +7,7 @@ function makeDoopDescriptor(index: number, target: any, key: string) {
     const original = target[key];
 
     let defaultValue: any;
-    
+
     // This implements the getter/setter for each Doop property
     function Doop(val: any) {
 
@@ -55,7 +55,7 @@ function makeDoopDescriptor(index: number, target: any, key: string) {
             (Doop as any).$__Doop__$Field = true;
             (Doop as any).$__Doop__$Init = original.$__Doop__$Init;
         }
-        
+
         (Doop as any).self = (container: Cursor<any>): Cursor<any> => {
             return cursor(
                 container()[key](),
@@ -81,13 +81,13 @@ function makeDoopDescriptor(index: number, target: any, key: string) {
         defaultValue = mapper.empty;
         (Doop as any).$__Doop__$Mapper = original.$__Doop__$Mapper;
 
-        (Doop as any).item = (container: Cursor<any>, address: any): Cursor<any> => {            
+        (Doop as any).item = (container: Cursor<any>, address: any): Cursor<any> => {
             const val = mapper.get(container()[key](), address);
-            
+
             return cursor(val === undefined ? mapper.empty : val,
                 (itemAction: Action<any, any>) => {
                     container({
-                        type: key + ".item",          
+                        type: key + ".item",
                         payload: { address, itemAction },
                         $: undefined
                     });
@@ -97,7 +97,7 @@ function makeDoopDescriptor(index: number, target: any, key: string) {
 
         reducers[key + ".item"] = (container: any, { address, itemAction }: any) => {
             const collection = container[key]();
-            const item = mapper.get(collection, address); 
+            const item = mapper.get(collection, address);
             const reduce = item.$__Doop__$Reduce;
             if (reduce) {
                 const newItem = reduce(item, itemAction);
@@ -128,7 +128,7 @@ function assign<Target, Source>(target: Target, source: Source): Target & Source
 }
 
 /** This overload is used in property declarations. Maybe prefer 'field 'as it
-    supports supplying an initial value. 
+    supports supplying an initial value.
 */
 export function doop<V, O>(): Doop<V, O>;
 
@@ -174,9 +174,9 @@ export function doop(
         Object.keys(target).forEach(key => {
             let staticField = target[key];
             if (staticField && staticField.$__Doop__$ActionName) {
-                
+
                 staticField = staticField.$__Doop__$ActionName(key);
-                
+
                 if (staticField.$__Doop__$Reducer) {
                     prototype.$__Doop__$Reducers[key] = staticField.$__Doop__$Reducer;
                 }
@@ -199,7 +199,7 @@ export function doop(
             }
         }
 
-        prototype.$__Doop__$Reduce = (state: any, action: any) => {            
+        prototype.$__Doop__$Reduce = (state: any, action: any) => {
             const reduce = prototype.$__Doop__$Reducers[action.type];
             return reduce ? reduce(state, action.payload) : state;
         };
@@ -207,7 +207,7 @@ export function doop(
         prototype.toJSON = function() {
             const obj: any = {};
             for (const key of Object.keys(indices)) {
-                obj[key] = this[key]();                
+                obj[key] = this[key]();
             }
             return obj;
         }
@@ -245,7 +245,7 @@ export interface Action<Target, Payload> {
 }
 
 function makeAction<State, Payload>(name: string, reduce: (state: State, payload: Payload) => State) {
-    
+
     const func = (payload: Payload) => {
         return { type: name, payload: payload, $: undefined as State };
     }
@@ -256,11 +256,11 @@ function makeAction<State, Payload>(name: string, reduce: (state: State, payload
         $__Doop__$Reducer: typeof reduce;
     };
 
-    merged = assign(func, { 
+    merged = assign(func, {
         $__Doop__$ActionName(newName: string) {
             return newName === name ? merged : makeAction<State, Payload>(newName, reduce);
         },
-        $__Doop__$Reducer: reduce 
+        $__Doop__$Reducer: reduce
     });
 
     return merged;
@@ -278,7 +278,7 @@ export function action<State, Payload>(reduce: (state: State, payload: Payload) 
 }
 
 export interface Cursor<State> {
-    (): State;    
+    (): State;
     (action: Action<State, any>): void;
 }
 
@@ -288,9 +288,9 @@ function cursor<State>(
 ): Cursor<State> {
 
     return (action?: Action<State, any>) => {
-        if (action) {           
+        if (action) {
             dispatch(action);
-        }        
+        }
         return snapshot;
     };
 }
@@ -360,7 +360,6 @@ export function createReducer<State>(init: State) {
 }
 
 export interface CommonStore<State> {
-    dispatch(action: Action<State, any>): void;
     subscribe(handler: () => void): { () : void; };
 }
 
@@ -386,7 +385,6 @@ export function createStore<State>(init: State): SimpleStore<State> {
         cursor() {
             return cursor(state, dispatch);
         },
-        dispatch,
         subscribe(handler: () => void) {
             subscribers.push(handler);
             return () => {
@@ -401,7 +399,8 @@ export function createStore<State>(init: State): SimpleStore<State> {
 
 // Redux integration
 export interface ReduxStore<State> extends CommonStore<State> {
-    getState(): State;    
+    getState(): State;
+    dispatch(action: Action<State, any>): void;
 }
 
 export function cursorFromStore<State>(store: ReduxStore<State>) {
