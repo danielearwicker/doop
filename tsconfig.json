@@ -9,6 +9,7 @@
         "emitDecoratorMetadata": true,
         "declaration": true,
         "noImplicitAny": true,
+        "strictNullChecks": true,
         "removeComments": false,
         "noLib": false,
         "preserveConstEnums": true,
@@ -21,5 +22,5 @@
     "exclude": [
         "node_modules",
         "built"
-    ]    
+    ]
 }

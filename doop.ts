@@ -79,12 +79,14 @@ function makeDoopDescriptor(index: number, target: any, key: string) {
 
     if (mapper) {
         defaultValue = mapper.empty;
-        (Doop as any).$__Doop__$Mapper = original.$__Doop__$Mapper;
+        (Doop as any).$__Doop__$Mapper = mapper;
+
+        const defaultItem = (Doop as any).$__Doop__$DefaultItem = original.$__Doop__$DefaultItem;
 
         (Doop as any).item = (container: Cursor<any>, address: any): Cursor<any> => {
             const val = mapper.get(container()[key](), address);
 
-            return cursor(val === undefined ? mapper.empty : val,
+            return cursor(val === undefined ? defaultItem : val,
                 (itemAction: Action<any, any>) => {
                     container({
                         type: key + ".item",
@@ -95,12 +97,21 @@ function makeDoopDescriptor(index: number, target: any, key: string) {
             );
         };
 
+        (Doop as any).remove = (address: any): Action<any, any> => {
+            return {
+                type: key + ".item",
+                payload: { address, undefined },
+                $: undefined
+            };
+        };
+
         reducers[key + ".item"] = (container: any, { address, itemAction }: any) => {
             const collection = container[key]();
             const item = mapper.get(collection, address);
-            const reduce = item.$__Doop__$Reduce;
+            const defaulted = item === undefined ? defaultItem : item;
+            const reduce = defaulted.$__Doop__$Reduce;
             if (reduce) {
-                const newItem = reduce(item, itemAction);
+                const newItem = itemAction === undefined ? undefined : reduce(defaulted, itemAction);
                 const newCollection = mapper.set(collection, address, newItem);
                 return container[key](newCollection);
             }
@@ -153,7 +164,7 @@ export function doop(
 
     if (!target) {
         // We're being used to declare the property
-        return null;
+        return undefined;
     }
 
     if (!propertyKey) {
@@ -168,7 +179,7 @@ export function doop(
             return this;
         }
 
-        const prototype = wrapper.prototype = Object.create(target.prototype);
+        const prototype = wrapper.prototype = /*Object.create(*/target.prototype/*)*/;
         prototype.$__Doop__$Reducers = {};
 
         Object.keys(target).forEach(key => {
@@ -247,7 +258,7 @@ export interface Action<Target, Payload> {
 function makeAction<State, Payload>(name: string, reduce: (state: State, payload: Payload) => State) {
 
     const func = (payload: Payload) => {
-        return { type: name, payload: payload, $: undefined as State };
+        return { type: name, payload: payload, $: undefined as any };
     }
 
     let merged: {
@@ -295,10 +306,10 @@ function cursor<State>(
     };
 }
 
-export interface Mapper<Type, Collection, Address> {
-    /*readonly*/ empty: Collection;
-    get(container: Collection, address: Address): Type;
-    set(container: Collection, address: Address, value: Type): Collection;
+export interface Mapper<Item, Collection, Address> {
+    readonly empty: Collection;
+    get(container: Collection, address: Address): Item;
+    set(container: Collection, address: Address, value: Item): Collection;
 }
 
 export function arraySet<T>(array: T[], index: number, value: T) {
@@ -321,6 +332,11 @@ const objectMapper: Mapper<any, any, any> = {
     empty: {},
     get(obj, key) { return obj[key]; },
     set(obj, key, value) {
+        if (value === undefined) {
+            var clone = assign({}, obj);
+            delete clone[key];
+            return clone;
+        }
         return merge(obj, { [key]: value });
     }
 };
@@ -337,17 +353,24 @@ export function field<Type, Container>(init?: Type) {
     return { $__Doop__$Field: true, $__Doop__$Init: init  } as any as Field<Type, Container>;
 }
 
-export interface Collection<Type, CollectionType, Address, Container> extends Field<CollectionType, Container> {
-    item(container: Cursor<Container>, address: Address): Cursor<Type>;
+export interface CollectionField<Item, Collection, Address, Container> extends Field<Collection, Container> {
+    item(container: Cursor<Container>, address: Address): Cursor<Item>;
+    remove(address: Address): Action<Container, Address>;
 }
 
-export function collection<Type, CollectionType, Address, Container>(mapper: Mapper<Type, CollectionType, Address>) {
+export function collection<Item, Collection, Address, Container>(
+    mapper: Mapper<Item, Collection, Address>,
+    defaultItem?: Item
+) {
     // posts actions that include the address in the payload
-    return { $__Doop__$Mapper: mapper } as any as Collection<Type, CollectionType, Address, Container>;
+    return {
+        $__Doop__$Mapper: mapper,
+        $__Doop__$DefaultItem: defaultItem
+    } as any as CollectionField<Item, Collection, Address, Container>;
 }
 
 export function createReducer<State>(init: State) {
-    return (state: State, action: Action<State, any>) => {
+    return (state: State | undefined, action: Action<State, any>) => {
         if (!state) {
             return init;
         }
