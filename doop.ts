@@ -370,7 +370,7 @@ export function collection<Item, Collection, Address, Container>(
 }
 
 export function createReducer<State>(init: State) {
-    return (state: State | undefined, action: Action<State, any>) => {
+    return (state: State, action: Action<State, any>) => {
         if (!state) {
             return init;
         }
@@ -394,7 +394,7 @@ export function createStore<State>(init: State): SimpleStore<State> {
 
     const reducer = createReducer(init);
     const subscribers: (() => void)[] = [];
-    let state = reducer(undefined, { type: "$__Doop__$initAction" } as Action<State, any>);;
+    let state = reducer(undefined as any, { type: "$__Doop__$initAction" } as Action<State, any>);;
 
     function dispatch(action: Action<State, any>) {
         const newState = reducer(state, action);
